@@ -16,8 +16,8 @@ from SrC.models_PatchTST import PatchTSTConfig
 from SrC.Training_PatchTST import train_on_data
 
 # 數據路徑配置
-DATA_DIR = r"C:\Users\goodj\Desktop\NTK\Neural_Tarot_Kards_v4\Data\Raw\train_data_neuro"
-OUTPUT_DIR = r"C:\Users\goodj\Desktop\NTK\Neural_Tarot_Kards_v4\Outputs\checkpoints"
+DATA_DIR = os.path.join(os.path.dirname(__file__), "Data", "Raw", "train_data_neuro")
+OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "Outputs", "checkpoints")
 
 # 訓練選項配置
 TRAINING_OPTIONS = {
