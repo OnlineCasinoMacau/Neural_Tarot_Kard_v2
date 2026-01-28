@@ -1,0 +1,62 @@
+# Neural Tarot Kards v4 - PatchTST Configuration
+# ================================================
+
+# Data paths
+data:
+  data_dir: "C:/Users/goodj/Desktop/NTK/Neural_Tarot_Kards_v4/Data/Raw/train_data_neuro"
+  output_dir: "C:/Users/goodj/Desktop/NTK/Neural_Tarot_Kards_v4/Outputs/checkpoints"
+
+# Model architecture
+model:
+  input_size: 96          # Input sequence length
+  horizon: 24             # Prediction horizon
+  patch_len: 8            # Patch length
+  stride: 4               # Stride between patches
+  d_model: 128            # Model dimension
+  n_heads: 4              # Number of attention heads
+  e_layers: 3             # Number of encoder layers
+  dropout: 0.2            # Dropout rate
+
+# RevIN (Reversible Instance Normalization)
+revin:
+  enabled: true           # Enable RevIN
+  affine: false           # Affine transformation
+
+# Training hyperparameters
+training:
+  batch_size: 32
+  learning_rate: 0.001    # 1e-3
+  max_epochs: 50
+  early_stop_patience: 10
+  val_split: 0.2          # Validation split ratio
+
+# Training options
+training_options:
+  1:
+    name: "Train on Affi"
+    files:
+      - "train_data_affi.npz"
+    output_subdir: "affi"
+  2:
+    name: "Train on Beignet"
+    files:
+      - "train_data_beignet.npz"
+    output_subdir: "beignet"
+  3:
+    name: "Train on Affi D2"
+    files:
+      - "train_data_affi.npz"
+      - "train_data_affi_2024-03-20_private.npz"
+    output_subdir: "affi_d2"
+  4:
+    name: "Train on Beignet D2 (06-01)"
+    files:
+      - "train_data_beignet.npz"
+      - "train_data_beignet_2022-06-01_private.npz"
+    output_subdir: "beignet_d2_0601"
+  5:
+    name: "Train on Beignet D2 (06-02)"
+    files:
+      - "train_data_beignet.npz"
+      - "train_data_beignet_2022-06-02_private.npz"
+    output_subdir: "beignet_d2_0602"

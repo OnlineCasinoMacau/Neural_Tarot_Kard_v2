@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment
+.env
+.venv
+env/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data files (太大，不上傳原始數據)
+Data/Raw/
+*.npz
+*.npy
+
+# Output files (訓練結果，不上傳)
+Outputs/
+outputs/
+experiments/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Claude cache
+.claude/
