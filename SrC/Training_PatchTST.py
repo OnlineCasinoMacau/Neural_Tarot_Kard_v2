@@ -54,7 +54,10 @@ def gaussian_smooth(data: np.ndarray, sigma: float, dt: float = 0.01) -> np.ndar
 
 def sqrt_transform(data: np.ndarray) -> np.ndarray:
     """平方根變換 (Anscombe Transform) - 穩定泊松方差"""
-    return np.sqrt(data + 3/8)
+    # Ensure non-negative values before sqrt to prevent NaN
+    data_shifted = data + 3/8
+    data_shifted = np.maximum(data_shifted, 0)  # Clip negative values to 0
+    return np.sqrt(data_shifted)
 
 
 def inverse_sqrt_transform(data: np.ndarray) -> np.ndarray:
@@ -110,6 +113,12 @@ class NeuralDataset(Dataset):
         if transform:
             data = gaussian_smooth(data, sigma=gaussian_sigma, dt=dt)
             data = sqrt_transform(data)
+
+            # Validate data after transformation
+            if np.isnan(data).any():
+                raise ValueError(f"NaN values detected after preprocessing! Check data range.")
+            if np.isinf(data).any():
+                raise ValueError(f"Inf values detected after preprocessing! Check data range.")
 
         self.data = torch.FloatTensor(data)
         self.n_samples = (len(data) - input_size - horizon) // stride + 1
@@ -520,9 +529,15 @@ def train_on_data(
 
     # 最終評估
     logger.info("\n[Step 4] 最終評估...")
-    trainer.load_model('best_model.pt')
-    final_loss, final_mse = trainer.validate(val_loader)
-    logger.info(f"最終驗證 MSE: {final_mse:.6f}")
+    best_model_path = Path(save_dir) / 'best_model.pt'
+    if best_model_path.exists():
+        trainer.load_model('best_model.pt')
+        final_loss, final_mse = trainer.validate(val_loader)
+        logger.info(f"最終驗證 MSE: {final_mse:.6f}")
+    else:
+        logger.warning("best_model.pt not found, using current model state")
+        final_loss, final_mse = trainer.validate(val_loader)
+        logger.info(f"最終驗證 MSE: {final_mse:.6f}")
 
     # 保存部署包
     logger.info("\n[Step 5] 保存模型...")
